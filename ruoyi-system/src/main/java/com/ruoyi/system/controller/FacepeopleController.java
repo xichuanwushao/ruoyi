@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.config.RuoYiConfig;
+import com.ruoyi.common.utils.file.FileUploadUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ import com.ruoyi.system.domain.Facepeople;
 import com.ruoyi.system.service.IFacepeopleService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 人脸识别库Controller
@@ -87,6 +89,24 @@ public class FacepeopleController extends BaseController
         face = RuoYiConfig.getProfile()+ face;
         facepeople.setImageBase64(face);
         return toAjax(facepeopleService.insertFacepeople(facepeople));
+    }
+
+
+    /**
+     * 获取人脸识别库详细信息
+     */
+    @PostMapping("/getface")
+    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    {
+        // 上传文件路径
+        String filePath = RuoYiConfig.getUploadPath();
+        // 上传并返回新文件名称
+        String fileName = FileUploadUtils.upload(filePath, file);
+        String face = fileName.replace("/profile","");
+        face = RuoYiConfig.getProfile()+ face;
+        Facepeople facepeople = facepeopleService.selectFacepeopleById(1L);
+        facepeople.setRemark(face);
+        return success(facepeople);
     }
 
     /**
