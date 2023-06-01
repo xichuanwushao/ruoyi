@@ -66,11 +66,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.xichuanwushao</groupId>
-            <artifactId>rxtx</artifactId>
-            <version>2.2</version>
-        </dependency>
 
 
 
