@@ -1,12 +1,15 @@
-package com.ruoyi.web.core.config;
+package com.huoyanhou.web.core.config;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import com.ruoyi.common.config.RuoYiConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.ruoyi.common.config.RuoYiConfig;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.auth.In;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -24,7 +27,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  * Swagger2的接口配置
- * 
+ *
  * @author ruoyi
  */
 @Configuration
@@ -48,6 +51,8 @@ public class SwaggerConfig
     @Bean
     public Docket createRestApi()
     {
+        Set<String> stringSet = new HashSet<String>();
+        stringSet.add("application/json");
         return new Docket(DocumentationType.OAS_30)
                 // 是否启用Swagger
                 .enable(enabled)
@@ -58,14 +63,14 @@ public class SwaggerConfig
                 // 扫描所有有注解的api，用这种方式更灵活
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 // 扫描指定包中的swagger注解
-                // .apis(RequestHandlerSelectors.basePackage("com.ruoyi.project.tool.swagger"))
+                // .apis(RequestHandlerSelectors.basePackage("com.huoyanhou.project.tool.swagger"))
                 // 扫描所有 .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
                 /* 设置安全模式，swagger可以设置访问token */
                 .securitySchemes(securitySchemes())
                 .securityContexts(securityContexts())
-                .pathMapping(pathMapping);
+                .pathMapping(pathMapping).consumes(stringSet).produces(stringSet);
     }
 
     /**
@@ -113,9 +118,9 @@ public class SwaggerConfig
         // 用ApiInfoBuilder进行定制
         return new ApiInfoBuilder()
                 // 设置标题
-                .title("标题：若依管理系统_接口文档")
+                .title("胶州湾第二海底隧道项目")
                 // 描述
-                .description("描述：用于管理集团旗下公司的人员信息,具体包括XXX,XXX模块...")
+                .description("胶州湾第二海底隧道项目")
                 // 作者信息
                 .contact(new Contact(ruoyiConfig.getName(), null, null))
                 // 版本

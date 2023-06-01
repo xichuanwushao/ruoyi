@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.FacepeopleMapper">
+    
+    <resultMap type="Facepeople" id="FacepeopleResult">
+        <result property="id"    column="id"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="number"    column="number"    />
+        <result property="imagePath"    column="image_path"    />
+        <result property="imageBase64"    column="image_base64"    />
+        <result property="userName"    column="user_name"    />
+    </resultMap>
+
+    <sql id="selectFacepeopleVo">
+        select id, nick_name, number, image_path, image_base64, user_name from facepeople
+    </sql>
+
+    <select id="selectFacepeopleList" parameterType="Facepeople" resultMap="FacepeopleResult">
+        <include refid="selectFacepeopleVo"/>
+        <where>  
+            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="number != null  and number != ''"> and number = #{number}</if>
+            <if test="imagePath != null  and imagePath != ''"> and image_path = #{imagePath}</if>
+            <if test="imageBase64 != null  and imageBase64 != ''"> and image_base64 = #{imageBase64}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectFacepeopleById" parameterType="Long" resultMap="FacepeopleResult">
+        <include refid="selectFacepeopleVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacepeople" parameterType="Facepeople" useGeneratedKeys="true" keyProperty="id">
+        insert into facepeople
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">nick_name,</if>
+            <if test="number != null">number,</if>
+            <if test="imagePath != null">image_path,</if>
+            <if test="imageBase64 != null">image_base64,</if>
+            <if test="userName != null">user_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">#{nickName},</if>
+            <if test="number != null">#{number},</if>
+            <if test="imagePath != null">#{imagePath},</if>
+            <if test="imageBase64 != null">#{imageBase64},</if>
+            <if test="userName != null">#{userName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFacepeople" parameterType="Facepeople">
+        update facepeople
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="imagePath != null">image_path = #{imagePath},</if>
+            <if test="imageBase64 != null">image_base64 = #{imageBase64},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFacepeopleById" parameterType="Long">
+        delete from facepeople where id = #{id}
+    </delete>
+
+    <delete id="deleteFacepeopleByIds" parameterType="String">
+        delete from facepeople where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
